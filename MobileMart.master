@@ -1,0 +1,494 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="MobileMart.master.cs" Inherits="MobileMart" %>
+
+<%@ Import Namespace="System.Data.SqlClient" %>
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <link rel="icon" href="images/ecom_mobile_logo.png" />
+    <title>Mobile Mart</title>
+    <!-- Meta tag Keywords -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8" />
+    <meta name="keywords" content="Mobile Mart,Limbdi Mobile shop,Mobile,Iphone,purchase Mobile" />
+    <script src="js/main.js"></script>
+    <!-- Sweet Alert -->
+    <script src="sweetalert/package/dist/sweetalert.min.js"></script>
+
+    <script>
+        addEventListener("load", function () {
+            setTimeout(hideURLbar, 0);
+        }, false);
+
+        function hideURLbar() {
+            window.scrollTo(0, 1);
+        }
+    </script>
+    <!-- //Meta tag Keywords -->
+    <link href="fontawesome/all.css" rel="stylesheet" />
+    <!-- Custom-Files -->
+    <link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
+    <!-- Bootstrap css -->
+    <link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+    <!-- Main css -->
+    <link rel="stylesheet" href="css/fontawesome-all.css" />
+    <!-- Font-Awesome-Icons-CSS -->
+    <link href="css/popuo-box.css" rel="stylesheet" type="text/css" media="all" />
+    <!-- pop-up-box -->
+    <link href="css/menu.css" rel="stylesheet" type="text/css" media="all" />
+    <!-- menu style -->
+    <!-- //Custom-Files -->
+
+    <!-- web fonts -->
+    <link href="//fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i&amp;subset=latin-ext" rel="stylesheet" />
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&amp;subset=cyrillic,cyrillic-ext,greek,greek-ext,latin-ext,vietnamese"
+        rel="stylesheet" />
+    <!-- //web fonts -->
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <script runat="server">
+        user u;
+        SqlConnection con;
+        SqlCommand cmd;
+        SqlDataReader dr;
+    </script>
+    <%
+        con = new SqlConnection(Application["conn"].ToString());
+        cmd = new SqlCommand();
+        con.Open();
+       
+        u = new user(Application);
+         %>
+
+    <form id="form1" runat="server">
+
+        <!-- header-bottom-->
+        <div class="header-bot">
+            <div class="container-fluid">
+                <div class="row header-bot_inner_wthreeinfo_header_mid">
+                    <!-- logo -->
+                    <div class="col-md-2">
+                        <h1 class="text-center mr-2">
+                            <a href="index.aspx" class="font-weight-bold font-italic">
+                                <img src="images/ecom_mobile_logo.png" alt="logo" class="img-fluid" style="height: 100px;" />
+                            </a>
+                        </h1>
+                    </div>
+                    <!-- //logo -->
+                    <!-- header-bot -->
+                    <div class="col-md-10 header mt-4 mb-md-0 mb-4">
+                        <div class="row">
+                            <!-- search -->
+                            <div class="col-10 agileits_search form-inline">
+                                
+                                    <input class="form-control mr-sm-2" type="search" id="searchtext" placeholder="Search" aria-label="Search"/>
+								
+                                <button class="btn my-2 my-sm-0" form="" id="searchbtn" onclick="searchitem()" type="submit">Search</button>
+							    
+                            </div>
+                            <script>
+                                function searchitem()
+                                {
+                                    searchtext = $("#searchtext").val();
+                                    window.location.href = "search.aspx?q=" + searchtext;
+                                }
+                            </script>
+                            <!-- //search -->
+                            <!-- cart details -->
+                            <div class="col-1 top_nav_right text-center mt-sm-0 mt-2">
+                                <div class="wthreecartaits wthreecartaits2 cart cart box_1">
+                                    <a class="btn w3view-cart btn-dark" href="cart.aspx">
+                                        <i class="fas fa-cart-arrow-down"></i>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="col-1 top_nav_right text-center mt-sm-0 mt-2">
+                                <div class="wthreecartaits wthreecartaits2 cart cart box_1">
+                                  <%
+                                      if(Session["user"] != null)
+                                      {
+                                      %>
+                                      <a class="btn w3view-cart btn-dark" href="profile.aspx">
+                                        <i class="fas fa-user"></i>
+                                    </a>
+                                   
+                                     <%
+
+                                     }                                         
+                                       %>
+                                </div>
+                            </div>
+
+                            <!-- //cart details -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- shop locator (popup) -->
+        <!-- //header-bottom -->
+        <!-- navigation -->
+        <div class="navbar-inner">
+            <div class="container-fluid">
+                <nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+                    <button class="navbar-toggler" type="button" form="" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav ml-auto text-center mr-xl-5">
+                            <li class="nav-item mr-lg-2 mb-lg-0 mb-2">
+                                <a class="nav-link <%= Request.Path.Substring(1) == "index.aspx" ? "active" : "" %>" href="index.aspx">Home</a>
+                            </li>
+                            <li class="nav-item mr-lg-2 mb-lg-0 mb-2">
+                                <a class="nav-link <%= Request.Path.Substring(1) == "product.aspx" ? "active" : "" %>" href="product.aspx">Products</a>
+                            </li>
+                            <li class="nav-item mr-lg-2 mb-lg-0 mb-2">
+                                <a class="nav-link <%= Request.Path.Substring(1) == "about.aspx" ? "active" : "" %>" href="about.aspx">About Us</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link <%= Request.Path.Substring(1) == "contact.aspx" ? "active" : "" %>" href="contact.aspx">Contact Us</a>
+                            </li>
+
+                            <% 
+                                if (Session["user"] == null)
+                                {
+                            %>
+                            <li class="nav-item">
+                                <a class="nav-link <%= Request.Path.Substring(1) == "login.aspx" ? "active" : "" %>" href="login.aspx">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link <%= Request.Path.Substring(1) == "register.aspx" ? "active" : "" %>" href="register.aspx">Register</a>
+                            </li>
+                            <%
+                                }
+                                else
+                                {
+                                    u.read(Convert.ToInt64(Session["user"].ToString())); 
+                                    
+                            %>
+                            
+                            <li class="nav-item">
+                                <asp:LinkButton runat="server" ID="logoutbtn" OnClick="logoutbtn_Click" CssClass="nav-link">Logout</asp:LinkButton>
+                            </li>
+                            <%
+                                }
+                            %>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </div>
+        <!-- //navigation -->
+
+        <asp:ContentPlaceHolder ID="body" runat="server">
+        </asp:ContentPlaceHolder>
+     
+
+        <!-- footer -->
+        <footer>
+            <div class="footer-top-first">
+                <div class="container py-md-5 py-sm-4 py-3">
+                    <!-- footer second section -->
+                    <div class="row w3l-grids-footer border-top border-bottom py-sm-4 py-3">
+                        <div class="col-md-4 offer-footer">
+                            <div class="row">
+                                <div class="col-4 icon-fot">
+                                    <i class="fas fa-dolly"></i>
+                                </div>
+                                <div class="col-8 text-form-footer">
+                                    <h3>Free Shipping</h3>
+                                    <p>on orders over <i class="fa fa-rupee-sign"></i>2000</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 offer-footer my-md-0 my-4">
+                            <div class="row">
+                                <div class="col-4 icon-fot">
+                                    <i class="fas fa-shipping-fast"></i>
+                                </div>
+                                <div class="col-8 text-form-footer">
+                                    <h3>Fast Delivery</h3>
+                                    <p>World Wide</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 offer-footer">
+                            <div class="row">
+                                <div class="col-4 icon-fot">
+                                    <i class="far fa-thumbs-up"></i>
+                                </div>
+                                <div class="col-8 text-form-footer">
+                                    <h3>Big Choice</h3>
+                                    <p>of Products</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- //footer second section -->
+                </div>
+            </div>
+            <!-- footer third section -->
+            <div class="w3l-middlefooter-sec">
+                <div class="container py-md-5 py-sm-4 py-3">
+                    <div class="row footer-info w3-agileits-info">
+                        <!-- footer categories -->
+                        <div class="col-md-3 col-sm-6 footer-grids">
+                            <h3 class="text-white font-weight-bold mb-3">Categories</h3>
+                            <ul>
+                                <%  
+                                    cmd.Connection = con;
+                                    cmd.CommandText = "select top 6 * from categories c where c.catId in (select catId from products)";
+                                    dr = cmd.ExecuteReader();
+                                    if(dr.HasRows)
+                                    {
+                                        while(dr.Read())
+                                        {
+                                            %>
+                                <li class="mb-3">
+                                    <a href="product.aspx?catId=<%= dr["catId"] %>"><%= dr["catName"] %></a>
+                                </li>
+
+                                <%
+                                        }
+                                    }
+                                    %>
+                            </ul>
+                        </div>
+                        <!-- //footer categories -->
+                        <!-- quick links -->
+                        <div class="col-md-3 col-sm-6 footer-grids mt-sm-0 mt-4">
+                            <h3 class="text-white font-weight-bold mb-3">Quick Links</h3>
+                            <ul>
+                                
+                                <li class="mb-3">
+                                    <a class="<%= Request.Path.Substring(1) == "index.aspx" ? "active" : "" %>" href="index.aspx">Home</a>
+                                </li>
+
+                                <li class="mb-3">
+                                    <a class="<%= Request.Path.Substring(1) == "product.aspx" ? "active" : "" %>" href="product.aspx">Product</a>
+                                </li>
+
+                                <li class="mb-3">
+                                    <a class="<%= Request.Path.Substring(1) == "about.aspx" ? "active" : "" %>" href="about.aspx">about</a>
+                                </li>
+
+                                <li class="mb-3">
+                                    <a class="<%= Request.Path.Substring(1) == "contact.aspx" ? "active" : "" %>" href="contact.aspx">Contact</a>
+                                </li>
+
+
+                                <li class="mb-3">
+                                    <a class="<%= Request.Path.Substring(1) == "login.aspx" ? "active" : "" %>" href="login.aspx">Login</a>
+                                </li>
+                                
+                                <li class="mb-3">
+                                    <a class="<%= Request.Path.Substring(1) == "register.aspx" ? "active" : "" %>" href="register.aspx">Register</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                        <div class="col-md-3 col-sm-6 footer-grids mt-md-0 mt-4">
+                            <h3 class="text-white font-weight-bold mb-3">Get in Touch</h3>
+                            <ul>
+                                <li class="mb-3">
+                                    <i class="fas fa-map-marker"></i>Limbdi, Surendranagar, 363421.</li>
+                                <li class="mb-3">
+                                    <i class="fas fa-mobile"></i>8156060143 </li>
+                                <li class="mb-3">
+                                    <i class="fas fa-phone"></i>02754 228648 </li>
+                                <li class="mb-3">
+                                    <i class="fas fa-envelope-open"></i>
+                                    <a href="mailto:yc266014@gmail.com">yc266014@gmail.com</a>
+                                </li>
+                                <li>
+                                    <i class="fas fa-envelope-open"></i>
+                                    <a href="">mobilemart1@gmail.com</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-3 col-sm-6 footer-grids w3l-agileits mt-md-0 mt-4">
+                            <!-- social icons -->
+                            <div class="footer-grids  w3l-socialmk mt-3">
+                                <h3 class="text-white font-weight-bold mb-3">Follow Us on</h3>
+                                <div class="social">
+                                    <ul>
+                                        <li>
+                                            <a class="icon fb" href="#">
+                                                <i class="fab fa-facebook-f"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="icon tw" href="#">
+                                                <i class="fab fa-twitter"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="icon gp" href="#">
+                                                <i class="fab fa-google-plus-g"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- //social icons -->
+                        </div>
+                    </div>
+                    <!-- //quick links -->
+                </div>
+            </div>
+            <!-- //footer third section -->
+        </footer>
+        <!-- //footer -->
+        <!-- copyright -->
+        <div class="copy-right py-3">
+            <div class="container">
+                <p class="text-center text-white">
+                    © 2023 Mobile Mart. All rights reserved | Design by
+				<a href="">Yash Chauhan</a>
+                </p>
+            </div>
+        </div>
+        <!-- //copyright -->
+
+    </form>
+    <!-- js-files -->
+    <!-- jquery -->
+    <script src="js/jquery-2.2.3.min.js"></script>
+    <!-- //jquery -->
+
+    <!-- nav smooth scroll -->
+    <script>
+        $(document).ready(function () {
+            $(".dropdown").hover(
+				function () {
+				    $('.dropdown-menu', this).stop(true, true).slideDown("fast");
+				    $(this).toggleClass('open');
+				},
+				function () {
+				    $('.dropdown-menu', this).stop(true, true).slideUp("fast");
+				    $(this).toggleClass('open');
+				}
+			);
+        });
+    </script>
+    <!-- //nav smooth scroll -->
+
+    <!-- popup modal (for location)-->
+    <script src="js/jquery.magnific-popup.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.popup-with-zoom-anim').magnificPopup({
+                type: 'inline',
+                fixedContentPos: false,
+                fixedBgPos: true,
+                overflowY: 'auto',
+                closeBtnInside: true,
+                preloader: false,
+                midClick: true,
+                removalDelay: 300,
+                mainClass: 'my-mfp-zoom-in'
+            });
+
+        });
+    </script>
+    <!-- //popup modal (for location)-->
+
+    <!-- cart-js -->
+    <script src="js/minicart.js"></script>
+    <script>
+        paypals.minicarts.render(); //use only unique class names other than paypals.minicarts.Also Replace same class name in css and minicart.min.js
+
+        paypals.minicarts.cart.on('checkout', function (evt) {
+            var items = this.items(),
+				len = items.length,
+				total = 0,
+				i;
+
+            // Count the number of each item in the cart
+            for (i = 0; i < len; i++) {
+                total += items[i].get('quantity');
+            }
+
+            if (total < 3) {
+                alert('The minimum order quantity is 3. Please add more to your shopping cart before checking out');
+                evt.preventDefault();
+            }
+        });
+    </script>
+    <!-- //cart-js -->
+
+    <!-- password-script -->
+    <script>
+        window.onload = function () {
+            document.getElementById("password1").onchange = validatePassword;
+            document.getElementById("password2").onchange = validatePassword;
+        }
+
+        function validatePassword() {
+            var pass2 = document.getElementById("password2").value;
+            var pass1 = document.getElementById("password1").value;
+            if (pass1 != pass2)
+                document.getElementById("password2").setCustomValidity("Passwords Don't Match");
+            else
+                document.getElementById("password2").setCustomValidity('');
+            //empty string means no validation error
+        }
+    </script>
+    <!-- //password-script -->
+
+    <!-- scroll seller -->
+    <script src="js/scroll.js"></script>
+    <!-- //scroll seller -->
+
+    <!-- smoothscroll -->
+    <script src="js/SmoothScroll.min.js"></script>
+    <!-- //smoothscroll -->
+
+    <!-- start-smooth-scrolling -->
+    <script src="js/move-top.js"></script>
+    <script src="js/easing.js"></script>
+    <script>
+        jQuery(document).ready(function ($) {
+            $(".scroll").click(function (event) {
+                event.preventDefault();
+
+                $('html,body').animate({
+                    scrollTop: $(this.hash).offset().top
+                }, 1000);
+            });
+        });
+    </script>
+    <!-- //end-smooth-scrolling -->
+
+    <!-- smooth-scrolling-of-move-up -->
+    <script>
+        $(document).ready(function () {
+            /*
+			var defaults = {
+				containerID: 'toTop', // fading element id
+				containerHoverID: 'toTopHover', // fading element hover id
+				scrollSpeed: 1200,
+				easingType: 'linear' 
+			};
+			*/
+            $().UItoTop({
+                easingType: 'easeOutQuart'
+            });
+
+        });
+    </script>
+    <!-- //smooth-scrolling-of-move-up -->
+
+    <!-- for bootstrap working -->
+    <script src="js/bootstrap.js"></script>
+    <!-- //for bootstrap working -->
+    <!-- //js-files -->
+</body>
+</html>
